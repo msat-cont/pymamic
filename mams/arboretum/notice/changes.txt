@@ -1,0 +1,61 @@
+
+
+include/arboretum/stCommon.h:86
+old, random() is a standard function, usage would conflict with this:
+#define random(x) ((int)((((double)rand()) / ((double)RAND_MAX)) * (x)))
+new:
+#define random2(x) ((int)((((double)rand()) / ((double)RAND_MAX)) * (x)))
+
+include/arboretum/stCommon.h:117,118
+added, to have the new 'random2' macro defined everywhere:
+#else
+   #define random2(x) random(x)
+
+include/arboretum/stMTree:982,984
+include/arboretum/stSlimTree.cc:1075,1590,1592
+include/arboretum/stDFTree.cc:1058,1615,1617
+the 'random(x)' function/macro call changed to 'random2(x)' macro call
+
+
+
+include/arboretum/st*Tree.cc:below copyright
+added include, since needed for 'sort' function:
+77:stDBMTree.cc
+74:stDFTree.cc
+75:stMTree.cc
+78:stSlimTree.cc
+72:stVPTree.cc
+#include <algorithm>
+
+
+include/arboretum/stSlimTree.cc:1075
+include/arboretum/stDFTree.cc:1058
+old, contains integer overflow:
+idx = numberOfEntries * random(RAND_MAX) / (RAND_MAX + 1);
+new, checked that is correct:
+idx = numberOfEntries * (random(RAND_MAX) / (RAND_MAX + 1.0));
+
+
+
+include/arboretum/stBasicObjects.h:80
+added include, needed for 'memcpy' function:
+#include <string.h>
+
+
+sample/sample*/app.cpp:34,37
+added explicit retyping,
+LoadTree((char *) CITYFILE);
+LoadVectorFromFile((char *) QUERYCITYFILE);
+
+
+
+
+Put along files of Brazilian cities with correct encoding.
+
+
+
+
+
+
+
+
